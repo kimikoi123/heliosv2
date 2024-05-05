@@ -2767,10 +2767,11 @@ body.homepage.is-preload #header:after {
 
   .carousel .reel {
     padding: 0 1.5em 0 1.5em;
+    display: flex;
   }
 
   .carousel article {
-    width: 18em;
+    min-width: 18em;
     margin: 0 1.25em 0 0;
   }
 }
@@ -3271,4 +3272,13 @@ body.homepage.is-preload #header:after {
   .carousel article .image {
     margin-bottom: 2em;
   }
+}
+
+.searchInput {
+  margin: 0 0 1rem 22px;
+  border-radius: 10px;
+  outline: none;
+  border: 1px solid black;
+  padding: 0.5rem;
+  width: 400px;
 }

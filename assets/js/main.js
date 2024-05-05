@@ -4,15 +4,6 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
-async function getProperties() {
-  const data = await (
-    await fetch("https://662e68263167c811e960.appwrite.global/v1/properties")
-  ).json();
-  return data.documents;
-}
-
-async function renderProperty() {}
-
 (async function ($) {
   var $window = $(window),
     $body = $("body"),
@@ -199,6 +190,7 @@ async function renderProperty() {}
 
   const properties = await getProperties();
   const reelElement = document.getElementById("container");
+  const searchInput = document.getElementById("search-input");
   reelElement.innerHTML = "";
 
   properties.forEach((property, index) => {
@@ -219,4 +211,50 @@ async function renderProperty() {}
 
     reelElement.appendChild(articleElement);
   });
+
+  searchInput.addEventListener("input", (e) => {
+    const search = e.target.value;
+
+    const filteredProperty = properties.filter((property) => {
+      const fullAddress =
+        property.street +
+        property.barangay +
+        property.municipality +
+        property.province;
+
+      return search.toLowerCase() === ""
+        ? property
+        : fullAddress.toLowerCase().includes(search);
+    });
+
+    console.log(filteredProperty);
+
+    reelElement.innerHTML = "";
+
+    filteredProperty.forEach((property, index) => {
+      const articleElement = document.createElement("article");
+      articleElement.innerHTML = `
+  <a href="#" class="image featured"><img src="images/real-estate.jpg" alt="" /></a>
+  <header>
+    <h3><a href="#">Property ${index + 1}</a></h3>
+  </header>
+  <div>
+    Address: ${property.street} ${property.barangay} ${property.municipality} ${
+        property.province
+      } ${property.postal_code}
+  </div>
+  <div>Beds: 4</div>
+  <div>Status: Available</div>
+  `;
+
+      reelElement.appendChild(articleElement);
+    });
+  });
 })(jQuery);
+
+async function getProperties() {
+  const data = await (
+    await fetch("https://662e68263167c811e960.appwrite.global/v1/properties")
+  ).json();
+  return data.documents;
+}
